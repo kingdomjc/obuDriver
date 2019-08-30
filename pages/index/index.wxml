@@ -16,6 +16,7 @@
     <button bindtap="sacn_device">扫描设备</button>
     <button bindtap="connect_device">连接设备</button>
     <button bindtap="deploy_device">部署设备</button>
+    <button bindtap="init_device">握手指令</button>
     <button bindtap="close_bt">关闭蓝牙</button>
   </view>
     <view class="functionView">

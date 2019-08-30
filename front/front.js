@@ -40,7 +40,6 @@ var bluetoothScan = function() {
     deviceId = device.deviceId
     console.log(deviceId)
   })
-  return deviceId
 }
 
 /**
@@ -96,6 +95,24 @@ var closeBluetooth = function() {
   })
 }
 
+//发送握手指令
+var initDevice = function(callback) {
+  if (typeof callback == 'function') {
+    BleUtil.initDevice(deviceId, callback)
+  }
+  // BleUtil.initDevice(deviceId, (code, data) => {
+  //   if (code == 0) {
+  //     console.log('握手成功'+data)
+  //   } else {
+  //     console.log('握手失败'+data)
+  //   }
+  // })
+}
+
+//设置定时任务
+var intervalId = setInterval(function() {
+  console.log("定时任务")
+}, 10000)
 
 // ----------与OBU设备相关----------
 
@@ -167,6 +184,7 @@ var frontInterface = {
   blueConnect: blueConnect,
   blueDeploy: blueDeploy,
   closeBluetooth: closeBluetooth,
+  initDevice: initDevice,
   Get16Para: Get16Para,
   Write16: Write16,
   Get15Para: Get15Para,

@@ -19,8 +19,7 @@ Page({
 
   sacn_device: function() {
     console.log('点击 扫描设备 按钮')
-    let a = frontInterface.bluetoothScan()
-    console.log("设备ID:" + a)
+    frontInterface.bluetoothScan()
   },
 
   connect_device: function () {
@@ -36,6 +35,17 @@ Page({
   close_bt:function(){
     console.log('点击 关闭蓝牙 按钮')
     frontInterface.closeBluetooth()
+  },
+
+  init_device:function(){
+    console.log('点击 握手指令 按钮')
+    frontInterface.initDevice((code, data) => {
+      if (code == 0) {
+        console.log('握手成功' + data)
+      } else {
+        console.log('握手失败' + data)
+      }
+    })
   },
 
   //事件处理函数
