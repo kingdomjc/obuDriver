@@ -1,6 +1,6 @@
 <!--index.wxml-->
-<view class="container">
-  <view class="userinfo">
+<view class="container" style="flex-direction:row;">
+  <!-- <view class="userinfo">
     <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
     <block wx:else>
       <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
@@ -9,5 +9,24 @@
   </view>
   <view class="usermotto">
     <text class="user-motto">{{motto}}</text>
+  </view> -->
+
+  <view class="functionView" >
+    <button bindtap="open_bt">打开蓝牙</button>
+    <button bindtap="sacn_device">扫描设备</button>
+    <button bindtap="connect_device">连接设备</button>
+    <button bindtap="deploy_device">部署设备</button>
+    <button bindtap="close_bt">关闭蓝牙</button>
   </view>
+    <view class="functionView">
+    <button bindtap="">1</button>
+    <button bindtap="">2</button>
+    <button bindtap="">3</button>
+  </view>
+    <view class="functionView">
+    <button bindtap="">1</button>
+    <button bindtap="">2</button>
+    <button bindtap="">3</button>
+  </view>
+
 </view>

@@ -1,6 +1,7 @@
 //index.js
 //获取应用实例
 const app = getApp()
+const frontInterface = require("../../front/front.js")
 
 Page({
   data: {
@@ -9,19 +10,47 @@ Page({
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo')
   },
+
+
+  open_bt: function() {
+    console.log('点击 打开蓝牙 按钮')
+    frontInterface.openBluetooth()
+  },
+
+  sacn_device: function() {
+    console.log('点击 扫描设备 按钮')
+    let a = frontInterface.bluetoothScan()
+    console.log("设备ID:" + a)
+  },
+
+  connect_device: function () {
+    console.log('点击 连接设备 按钮')
+    frontInterface.blueConnect()
+  },
+
+  deploy_device:function(){
+    console.log('点击 部署设备 按钮')
+    frontInterface.blueDeploy()
+  },
+
+  close_bt:function(){
+    console.log('点击 关闭蓝牙 按钮')
+    frontInterface.closeBluetooth()
+  },
+
   //事件处理函数
   bindViewTap: function() {
     wx.navigateTo({
       url: '../logs/logs'
     })
   },
-  onLoad: function () {
+  onLoad: function() {
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,
         hasUserInfo: true
       })
-    } else if (this.data.canIUse){
+    } else if (this.data.canIUse) {
       // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
       // 所以此处加入 callback 以防止这种情况
       app.userInfoReadyCallback = res => {
