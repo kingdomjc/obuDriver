@@ -20,7 +20,7 @@
     <button bindtap="close_bt">关闭蓝牙</button>
   </view>
     <view class="functionView">
-    <button bindtap="">1</button>
+    <button bindtap="device_num">获取设备编号</button>
     <button bindtap="">2</button>
     <button bindtap="">3</button>
   </view>

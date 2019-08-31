@@ -47,6 +47,19 @@ Page({
       }
     })
   },
+  device_num:function(){
+    console.log("获取设备信息")
+    frontInterface.getObuNum((code, data) => {
+      if (code == 0) {
+        console.log("设备序列号为：" + data.obuId)
+        console.log("设备电量：" + data.batlev)
+        console.log("设备蓝牙MAC：" + data.obuMac)
+        console.log("设备版本号：" + data.ver)
+      } else {
+        console.log('获取失败')
+      }
+    })
+  },
 
   //事件处理函数
   bindViewTap: function() {

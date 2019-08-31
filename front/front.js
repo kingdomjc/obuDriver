@@ -95,8 +95,15 @@ var closeBluetooth = function() {
   })
 }
 
+//设置定时任务
+var intervalId = setInterval(function() {
+  console.log("定时任务")
+}, 10000)
+
+// ----------与OBU设备相关----------
+
 //发送握手指令
-var initDevice = function(callback) {
+var initDevice = function (callback) {
   if (typeof callback == 'function') {
     BleUtil.initDevice(deviceId, callback)
   }
@@ -109,12 +116,14 @@ var initDevice = function(callback) {
   // })
 }
 
-//设置定时任务
-var intervalId = setInterval(function() {
-  console.log("定时任务")
-}, 10000)
-
-// ----------与OBU设备相关----------
+/**
+ * 获取设备信息
+ */
+var getObuNum = function (callback) {
+  if (typeof callback == 'function') {
+    BleUtil.getObuInfo(deviceId,callback)
+  }
+}
 
 /**
  * 获取写0016文件的参数
@@ -197,6 +206,7 @@ var frontInterface = {
   GetSysPara: GetSysPara,
   WriteSys: WriteSys,
   getSN: getSN,
+  getObuNum: getObuNum
 }
 
 //暴露接口对象
