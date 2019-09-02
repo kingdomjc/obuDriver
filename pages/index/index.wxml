@@ -11,7 +11,7 @@
     <text class="user-motto">{{motto}}</text>
   </view> -->
 
-  <view class="functionView" >
+  <view class="functionView">
     <button bindtap="open_bt">打开蓝牙</button>
     <button bindtap="sacn_device">扫描设备</button>
     <button bindtap="connect_device">连接设备</button>
@@ -19,12 +19,12 @@
     <button bindtap="init_device">握手指令</button>
     <button bindtap="close_bt">关闭蓝牙</button>
   </view>
-    <view class="functionView">
+  <view class="functionView">
     <button bindtap="device_num">获取设备编号</button>
-    <button bindtap="">2</button>
+    <button bindtap="card_info">获取卡片信息</button>
     <button bindtap="">3</button>
   </view>
-    <view class="functionView">
+  <view class="functionView">
     <button bindtap="">1</button>
     <button bindtap="">2</button>
     <button bindtap="">3</button>

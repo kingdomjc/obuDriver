@@ -103,7 +103,7 @@ var intervalId = setInterval(function() {
 // ----------与OBU设备相关----------
 
 //发送握手指令
-var initDevice = function (callback) {
+var initDevice = function(callback) {
   if (typeof callback == 'function') {
     BleUtil.initDevice(deviceId, callback)
   }
@@ -119,10 +119,17 @@ var initDevice = function (callback) {
 /**
  * 获取设备信息
  */
-var getObuNum = function (callback) {
+var getObuNum = function(callback) {
   if (typeof callback == 'function') {
-    BleUtil.getObuInfo(deviceId,callback)
+    BleUtil.getObuInfo(deviceId, callback)
   }
+}
+
+var getCardInfo = function() {
+  BleUtil.getCardInfo(deviceId, (code, data) => {
+    console.log('回复码：' + code)
+    console.log('回复数据：' + data)
+  })
 }
 
 /**
@@ -206,7 +213,8 @@ var frontInterface = {
   GetSysPara: GetSysPara,
   WriteSys: WriteSys,
   getSN: getSN,
-  getObuNum: getObuNum
+  getObuNum: getObuNum,
+  getCardInfo: getCardInfo
 }
 
 //暴露接口对象

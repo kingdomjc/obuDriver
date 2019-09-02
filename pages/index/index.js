@@ -22,22 +22,22 @@ Page({
     frontInterface.bluetoothScan()
   },
 
-  connect_device: function () {
+  connect_device: function() {
     console.log('点击 连接设备 按钮')
     frontInterface.blueConnect()
   },
 
-  deploy_device:function(){
+  deploy_device: function() {
     console.log('点击 部署设备 按钮')
     frontInterface.blueDeploy()
   },
 
-  close_bt:function(){
+  close_bt: function() {
     console.log('点击 关闭蓝牙 按钮')
     frontInterface.closeBluetooth()
   },
 
-  init_device:function(){
+  init_device: function() {
     console.log('点击 握手指令 按钮')
     frontInterface.initDevice((code, data) => {
       if (code == 0) {
@@ -47,7 +47,8 @@ Page({
       }
     })
   },
-  device_num:function(){
+
+  device_num: function() {
     console.log("获取设备信息")
     frontInterface.getObuNum((code, data) => {
       if (code == 0) {
@@ -59,6 +60,11 @@ Page({
         console.log('获取失败')
       }
     })
+  },
+
+  card_info: function() {
+    console.log('点击 获取卡片信息 按钮')
+    frontInterface.getCardInfo()
   },
 
   //事件处理函数
