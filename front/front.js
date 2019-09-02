@@ -125,8 +125,21 @@ var getObuNum = function(callback) {
   }
 }
 
+/**
+ * 获取卡片信息
+ */
 var getCardInfo = function() {
   BleUtil.getCardInfo(deviceId, (code, data) => {
+    console.log('回复码：' + code)
+    console.log('回复数据：' + data)
+  })
+}
+
+/**
+ * 设置不休眠时间
+ */
+var setSleepTime = function() {
+  BleUtil.obuSetSleepTime(30, (code, data) => {
     console.log('回复码：' + code)
     console.log('回复数据：' + data)
   })
@@ -137,10 +150,11 @@ var getCardInfo = function() {
  */
 var Get16Para = function() {
   BleUtil.getCardInfo(deviceId, (code, data) => {
-    if(code == 0){
+
+    if (code == 0) {
       console.log('provider是：' + data.provider)
-      console.log('卡片类型是：' + data.provider)
-      console.log('卡号是：'+data.cardId)
+      console.log('卡片类型是：' + data.cardType)
+      console.log('卡号是：' + data.cardId)
     } else {
       console.log('读取失败')
     }
@@ -224,7 +238,8 @@ var frontInterface = {
   WriteSys: WriteSys,
   getSN: getSN,
   getObuNum: getObuNum,
-  getCardInfo: getCardInfo
+  getCardInfo: getCardInfo,
+  setSleepTime: setSleepTime
 }
 
 //暴露接口对象

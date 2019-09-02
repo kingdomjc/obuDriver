@@ -67,10 +67,18 @@ Page({
     frontInterface.getCardInfo()
   },
 
-  Get16Para:function(){
+  Get16Para: function() {
     console.log('点击 读取0016 按钮')
     frontInterface.Get16Para()
   },
+
+  set_sleepTime: function() {
+    console.log('点击 设置休眠时间 按钮')
+    frontInterface.setSleepTime()
+  },
+
+
+
 
   //事件处理函数
   bindViewTap: function() {
