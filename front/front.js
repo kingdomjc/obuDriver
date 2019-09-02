@@ -126,7 +126,6 @@ var getObuNum = function(callback) {
 }
 
 var getCardInfo = function() {
-  console.log(typeof deviceId)
   BleUtil.getCardInfo(deviceId, (code, data) => {
     console.log('回复码：' + code)
     console.log('回复数据：' + data)
@@ -136,7 +135,17 @@ var getCardInfo = function() {
 /**
  * 获取写0016文件的参数
  */
-var Get16Para = function() {}
+var Get16Para = function() {
+  BleUtil.getCardInfo(deviceId, (code, data) => {
+    if(code == 0){
+      console.log('provider是：' + data.provider)
+      console.log('卡片类型是：' + data.provider)
+      console.log('卡号是：'+data.cardId)
+    } else {
+      console.log('读取失败')
+    }
+  })
+}
 
 /**
  * 写0016文件

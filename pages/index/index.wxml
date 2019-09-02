@@ -22,7 +22,7 @@
   <view class="functionView">
     <button bindtap="device_num">获取设备编号</button>
     <button bindtap="card_info">获取卡片信息</button>
-    <button bindtap="">3</button>
+    <button bindtap="Get16Para">读取0016</button>
   </view>
   <view class="functionView">
     <button bindtap="">1</button>

@@ -67,6 +67,11 @@ Page({
     frontInterface.getCardInfo()
   },
 
+  Get16Para:function(){
+    console.log('点击 读取0016 按钮')
+    frontInterface.Get16Para()
+  },
+
   //事件处理函数
   bindViewTap: function() {
     wx.navigateTo({
