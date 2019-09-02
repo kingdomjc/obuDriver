@@ -139,7 +139,7 @@ var getCardInfo = function() {
  * 设置不休眠时间
  */
 var setSleepTime = function() {
-  BleUtil.obuSetSleepTime(30, (code, data) => {
+  BleUtil.obuSetSleepTime('60', deviceId, (code, data) => {
     console.log('回复码：' + code)
     console.log('回复数据：' + data)
   })
@@ -149,7 +149,7 @@ var setSleepTime = function() {
  * 获取写0016文件的参数
  */
 var Get16Para = function() {
-  BleUtil.getCardInfo(deviceId, (code, data) => {
+  BleUtil.get0016Info(deviceId, (code, data) => {
 
     if (code == 0) {
       console.log('provider是：' + data.provider)
