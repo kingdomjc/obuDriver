@@ -126,6 +126,7 @@ var getObuNum = function(callback) {
 }
 
 var getCardInfo = function() {
+  console.log(typeof deviceId)
   BleUtil.getCardInfo(deviceId, (code, data) => {
     console.log('回复码：' + code)
     console.log('回复数据：' + data)
