@@ -148,13 +148,16 @@ var setSleepTime = function() {
 /**
  * 获取写0016文件的参数
  */
-var Get16Para = function() {
+var get16Para = function() {
   BleUtil.get0016Info(deviceId, (code, data) => {
 
     if (code == 0) {
-      console.log('provider是：' + data.provider)
-      console.log('卡片类型是：' + data.cardType)
-      console.log('卡号是：' + data.cardId)
+      console.log('持卡人身份标识:' + data.cardholderID)
+      console.log('本系统职工标识:' + data.staffID)
+      console.log('持卡人姓名:' + data.cardholderName)
+      console.log('持卡人证件号码:' + data.cardNumber)
+      console.log('持卡人证件类型:' + data.cardType)
+      console.log('随机数:' + data.random)
     } else {
       console.log('读取失败')
     }
@@ -164,58 +167,106 @@ var Get16Para = function() {
 /**
  * 写0016文件
  */
-var Write16 = function() {}
+var write16 = function(cardInfo,callback) {
+  if (typeof callback == 'function') {
+    BleUtil.set0016Info(cardInfo,deviceId, callback)
+  }
+}
 
 /**
  * 获取写0015文件的参数
  */
-var Get15Para = function() {}
+var get15Para = function() {
+  BleUtil.get0015Info(deviceId, (code, data) => {
+    if (code == 0) {
+      console.log('发卡方标识:' + data.provider)
+      console.log('卡片类型:' + data.cardType)
+      console.log('卡片版本号:' + data.cardVersion)
+      console.log('卡片id:' + data.cardId)
+      console.log('启用时间:' + data.signedDate)
+      console.log('到期时间:' + data.expiredDate)
+      console.log('车牌号码:' + data.vehicleNumber)
+      console.log('用户类型:' + data.userType)
+      console.log('车辆颜色:' + data.plateColor)
+      console.log('车辆类型:' + data.vehicleMode)
+      console.log('随机数:' + data.random)
+    } else {
+      console.log('读取失败')
+    }
+  })
+}
 
 /**
  * 写0015文件
  */
-var Write15 = function() {}
+var write15 = function (cardInfo, callback) {
+  if (typeof callback == 'function') {
+    BleUtil.set0015Info(cardInfo, deviceId, callback)
+  }
+}
 
 /**
  * 获取余额
  */
-var getBalance = function() {}
+var getBalance = function() {
+  BleUtil.getCardBalance(deviceId,(code,data)=>{
+    console.log(data)
+  })
+}
 
 /**
  * 圈存初始化
  */
-var initLoad = function() {}
+var initLoad = function (credit, terminnalNo, pinCode, procType, keyIndex, callback) {
+  BleUtil.loadCardInit(credit, terminnalNo, pinCode, procType, keyIndex,deviceId, (code, data) => {
+    console.log(data)
+  })
+}
 
 /**
  * 写金额
  */
-var WriteMoney = function() {}
+var writeMoney = function (comMoney,callback) {
+  if (typeof callback == 'function') {
+    BleUtil.writeMoney(cardInfo, deviceId, callback)
+  }
+}
 
 /**
- * 获取写车辆信息的参数
+ * 获取写车辆信息参数
  */
-var GetVehiclePara = function() {}
+var getVehiclePara = function(callback) {
+  if (typeof callback == 'function') {
+    BleUtil.getVehiclePara( deviceId, callback)
+  }
+}
 
 /**
  * 写车辆信息文件
  */
-var WriteVehicle = function() {}
+var writeVehicle = function (commandVeh,callback) {
+  if (typeof callback == 'function') {
+    BleUtil.writeVehicle(commandVeh,deviceId, callback)
+  }
+}
 
 /**
  * 获取写系统信息参数
  */
-var GetSysPara = function() {}
+var getSysPara = function(callback) {
+  if (typeof callback == 'function') {
+    BleUtil.getSysPara(deviceId, callback)
+  }
+}
 
 /**
  * 写系统信息文件
  */
-var WriteSys = function() {}
-
-/**
- * 获取S/N号
- */
-var getSN = function() {}
-
+var writeSys = function (commandSys, callback) {
+  if (typeof callback == 'function') {
+    BleUtil.writeSys(commandSys, deviceId, callback)
+  }
+}
 
 //接口对象
 var frontInterface = {
@@ -225,18 +276,17 @@ var frontInterface = {
   blueDeploy: blueDeploy,
   closeBluetooth: closeBluetooth,
   initDevice: initDevice,
-  Get16Para: Get16Para,
-  Write16: Write16,
-  Get15Para: Get15Para,
-  Write15: Write15,
+  get16Para: get16Para,
+  write16: write16,
+  get15Para: get15Para,
+  write15: write15,
   getBalance: getBalance,
   initLoad: initLoad,
-  WriteMoney: WriteMoney,
-  GetVehiclePara: GetVehiclePara,
-  WriteVehicle: WriteVehicle,
-  GetSysPara: GetSysPara,
-  WriteSys: WriteSys,
-  getSN: getSN,
+  writeMoney: writeMoney,
+  getVehiclePara: getVehiclePara,
+  writeVehicle: writeVehicle,
+  getSysPara: getSysPara,
+  writeSys: writeSys,
   getObuNum: getObuNum,
   getCardInfo: getCardInfo,
   setSleepTime: setSleepTime

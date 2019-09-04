@@ -67,17 +67,36 @@ Page({
     frontInterface.getCardInfo()
   },
 
-  Get16Para: function() {
+  get16Para: function() {
     console.log('点击 读取0016 按钮')
-    frontInterface.Get16Para()
+    frontInterface.get16Para()
+  },
+  get15Para:function(){
+    console.log('点击 读取0015 按钮')
+    frontInterface.get15Para()
   },
 
   set_sleepTime: function() {
     console.log('点击 设置休眠时间 按钮')
     frontInterface.setSleepTime()
   },
+  getBalance:function(){
+    console.log('点击 获取余额 按钮')
+    frontInterface.getBalance()
+  },
 
-
+  getVehiclePara:function(){
+    console.log('点击 获取写车辆信息参数')
+    frontInterface.getVehiclePara((code,data)=>{
+      console.log(data)
+    })
+  },
+  getSysPara:function(){
+    console.log('点击 获取写系统信息参数')
+    frontInterface.getSysPara((code, data) => {
+      console.log(data)
+    })
+  },
 
 
   //事件处理函数
