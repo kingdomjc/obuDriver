@@ -125,6 +125,16 @@ Page({
       }
     })
   },
+  write16:function(){
+    let command ="04d696003b0500bad8d7d3dde60000000000000000000000000000313432343031313938383039323934323234000000000000000000000000000000f6c68b8d"
+    frontInterface.write16(command,(code, message) => {
+      if (code == 0) {
+        console.log("写指令成功")
+      } else {
+        console.log(message)
+      }
+    })
+  },
   get15Para:function(){
     console.log('点击 读取0015 按钮')
     frontInterface.get15Para((code,data)=>{
@@ -145,23 +155,71 @@ Page({
       }
     })
   },
+  write15: function () {
+    let command = "00d695002fc9bdcef7140100011740140119012302000000082019090620290906bdfa4b375239323900000000000401f6c68b8d"
+    frontInterface.write16(command, (code, message) => {
+      if (code == 0) {
+        console.log("写指令成功")
+      } else {
+        console.log(message)
+      }
+    })
+  },
   getBalance:function(){
     console.log('点击 获取余额 按钮')
     frontInterface.getBalance((code,data)=>{
       console.log("余额"+data)
     })
   },
-
+  writeMoney:function(){
+    let command = "00d695002fc9bdcef7140100011740140119012302000000082019090620290906bdfa4b375239323900000000000401f6c68b8d"
+    frontInterface.writeMoney(command, (code, message) => {
+      if (code == 0) {
+        console.log("写指令成功")
+      } else {
+        console.log(message)
+      }
+    })
+  },
   getVehiclePara:function(){
     console.log('点击 获取写车辆信息参数')
     frontInterface.getVehiclePara((code,data)=>{
       console.log(data)
     })
   },
+  writeVehicle: function () {
+    let command = "04d681003fbdfa4b375239323900000000000401000000000000000000000005354341433541000000000000000000003431343430323000000000000000000089f0c470"
+    frontInterface.writeVehicle(command, (code, message) => {
+      if (code == 0) {
+        console.log("写指令成功")
+      } else {
+        console.log(message)
+      }
+    })
+  },
   getSysPara:function(){
     console.log('点击 获取写系统信息参数')
     frontInterface.getSysPara((code, data) => {
       console.log(data)
+    })
+  },
+  writeSys: function () {
+    let command = "04d681002bc9bdcef714010001164100960012a229c8cc201909062029090601bdfa4b375239323900000000be0eb59b"
+    frontInterface.writeSys(command, (code, message) => {
+      if (code == 0) {
+        console.log("写指令成功")
+      } else {
+        console.log(message)
+      }
+    })
+  },
+  obuSetSleepTime:function(){
+    frontInterface.obuSetSleepTime("60", (code, message) => {
+      if (code == 0) {
+        console.log(message)
+      } else {
+        console.log(message)
+      }
     })
   },
 

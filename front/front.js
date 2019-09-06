@@ -145,11 +145,16 @@ var get16Para = function(callback) {
 
 /**
  * 写0016文件
+ *写指令： 04d696003b0500bad8d7d3dde6000000000000000000000000000031343234303131393838303932393432323400000000000000000000000000000016af6b20
  */
 var write16 = function(cardInfo,callback) {
-  if (typeof callback == 'function') {
-    BleUtil.set0016Info(cardInfo,deviceId, callback)
-  }
+  BleUtil.set0016Info(cardInfo,deviceId, (code, data) => {
+    if (code == 0) {
+      callback(0, "write ok")
+    } else {
+      callback(1, "write fail")
+    }
+  })
 }
 
 /**
@@ -170,11 +175,16 @@ var get15Para = function(callback) {
 
 /**
  * 写0015文件
+ * 指令：04d695002fc9bdcef7140100011740140119012302000000082019090620290906bdfa4b375239323900000000000401f6c68b8d
  */
 var write15 = function (cardInfo, callback) {
-  if (typeof callback == 'function') {
-    BleUtil.set0015Info(cardInfo, deviceId, callback)
-  }
+  BleUtil.set0015Info(cardInfo, deviceId, (code, data) => {
+    if (code == 0) {
+      callback(0, "write ok")
+    } else {
+      callback(1, "write fail")
+    }
+  })
 }
 
 /**
@@ -195,20 +205,28 @@ var getBalance = function(callback) {
 
 /**
  * 圈存初始化
+ * '805000020B01' + padLeft(recharge) + terminal_no + '10'
+ * 805000020B010000000060000000020010
  */
-var initLoad = function (credit, terminnalNo, pinCode, procType, keyIndex, callback) {
-  BleUtil.loadCardInit(credit, terminnalNo, pinCode, procType, keyIndex,deviceId, (code, data) => {
+var initLoad = function (recharge, terminnalNo, pinCode, procType, keyIndex, callback) {
+  BleUtil.loadCardInit(recharge, terminnalNo, pinCode, procType, keyIndex,deviceId, (code, data) => {
     console.log(data)
   })
 }
 
 /**
  * 写金额
+ * 805200000B2019090609284180690490
+ * 805200000b201909060928418069049004
  */
-var writeMoney = function (comMoney,callback) {
-  if (typeof callback == 'function') {
-    BleUtil.writeMoney(cardInfo, deviceId, callback)
-  }
+var writeMoney = function (cardInfo,callback) {
+  BleUtil.loadCard(cardInfo, deviceId, (code, data) => {
+    if (code == 0) {
+      callback(0, "write ok")
+    } else {
+      callback(1, "write fail")
+    }
+  })
 }
 
 /**
@@ -229,11 +247,16 @@ var getVehiclePara = function(callback) {
 
 /**
  * 写车辆信息文件
+ * 指令 04d681003fbdfa4b375239323900000000000401000000000000000000000005354341433541000000000000000000003431343430323000000000000000000089f0c470
  */
-var writeVehicle = function (commandVeh,callback) {
-  if (typeof callback == 'function') {
-    BleUtil.writeVehicle(commandVeh,deviceId, callback)
-  }
+var writeVehicle = function (cardInfo,callback) {
+  BleUtil.writeVehicle(cardInfo, deviceId, (code, data) => {
+    if (code == 0) {
+      callback(0, "write ok")
+    } else {
+      callback(1, "write fail")
+    }
+  })
 }
 
 /**
@@ -254,11 +277,29 @@ var getSysPara = function(callback) {
 
 /**
  * 写系统信息文件
+ * 指令：04d681002bc9bdcef714010001164100960012a229c8cc201909062029090601bdfa4b375239323900000000be0eb59b
  */
-var writeSys = function (commandSys, callback) {
-  if (typeof callback == 'function') {
-    BleUtil.writeSys(commandSys, deviceId, callback)
-  }
+var writeSys = function (cardInfo, callback) {
+  BleUtil.writeSys(cardInfo, deviceId, (code, data) => {
+    if (code == 0) {
+      callback(0, "write ok")
+    } else {
+      callback(1, "write fail")
+    }
+  })
+}
+
+/**
+ * 设置obu保持蓝牙链接时长
+ */
+var obuSetSleepTime=function(time,callback){
+  BleUtil.obuSetSleepTime(time, deviceId, (code, data) => {
+    if (code == 0) {
+      callback(0, "set ok")
+    } else {
+      callback(1, "set fail")
+    }
+  })
 }
 
 //接口对象
@@ -281,6 +322,7 @@ var frontInterface = {
   getSysPara: getSysPara,
   writeSys: writeSys,
   getObuNum: getObuNum,
+  obuSetSleepTime:obuSetSleepTime,
 }
 
 //暴露接口对象
