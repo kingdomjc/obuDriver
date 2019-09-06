@@ -1,165 +1,144 @@
 // 引入依赖文件
 const BleUtil = require("../lib/BleUtil.js")
 
-var device = null
-var deviceId = ''
+var device = null //设备
+var deviceId = '' //设备标识
 
 // ----------与蓝牙相关----------
 
 /**
  * 打开蓝牙适配器
+ * callback:传递一个函数，参数为code，message
+ *          code：0 正常
+ *          code：1 错误
  */
-var openBluetooth = function() {
-  BleUtil.openBle((code) => {
-    if (code == 0) {
-      console.log('蓝牙已开启')
-      wx.showToast({
-        title: '蓝牙已开启',
-        duration: 2000,
-        icon: 'success',
-      })
-    } else if (code == 1) {
-      console.log('蓝牙未开启')
-      wx.showToast({
-        title: '蓝牙未开启',
-        duration: 2000,
-        icon: 'none',
-      })
-    } else {
-      console.log('Exception')
+var openBluetooth = function (callback) {
+  BleUtil.openBle(code=>{
+    if(code==0){
+      callback(0,"open ok")
+    }else{
+      callback(1,"no open ble")
     }
   })
 }
 
 /**
  * 搜索蓝牙
+ * callback:传递一个函数，参数为code，deviceObj|message
+ *        code：0          deviceObj:找到的设备蓝牙信息
+ *        code：1 错误     message:错误信息
+ *        
  */
-var bluetoothScan = function() {
-  BleUtil.scanBle((object) => {
-    device = object
-    deviceId = device.deviceId
-    console.log(deviceId)
+var bluetoothScan = function(callback) {
+  BleUtil.scanBle((code,deviceObj) => {
+    if(code==0){
+      device = deviceObj
+      deviceId = device.deviceId
+      callback(0,deviceObj)
+    }else{
+      callback(1,"No find")
+    }
   })
 }
 
 /**
  * 连接蓝牙
+ * callback:传递一个函数，参数为code,message
+ *          code：0
+ *          code：1 错误
  */
-var blueConnect = function() {
+var blueConnect = function(callback) {
   if (null == device) {
-    console.log("device = null")
+    callback(1,"no find ble")
     return
   }
   BleUtil.connectBle(device, (code) => {
     if (code == 0) {
-      console.log('连接成功')
+      callback(0,"connect ok")
     } else {
-      console.log('连接失败')
+      callback(1,"no connect")
     }
   })
 }
 
 /**
  * 部署
+ * callback:传递一个函数，参数为code,message
+ *          code：0
+ *          code：1 错误
  */
-var blueDeploy = function() {
+var blueDeploy = function(callback) {
   BleUtil.deployBle(deviceId, (code) => {
     if (code == 0) {
-      console.log('部署成功')
+      callback(0,"success")
     } else {
-      console.log('部署失败')
+      callback(1,'fail')
     }
   })
 }
 
 /**
  * 关闭蓝牙适配器
+ * callback:传递一个函数，参数为code,message
+ *          code：0
+ *          code：1 错误
  */
-var closeBluetooth = function() {
+var closeBluetooth = function(callback) {
   BleUtil.closeBle((code) => {
     if (code == 0) {
-      console.log('蓝牙已关闭')
-      wx.showToast({
-        title: '蓝牙已关闭',
-        duration: 2000,
-        icon: 'none',
-      })
+      callback(0,"close ok")
     } else {
-      console.log('蓝牙未关闭')
-      wx.showToast({
-        title: '蓝牙未关闭',
-        duration: 2000,
-        icon: 'none',
-      })
+      callback(1, "close fail")
     }
   })
 }
 
-//设置定时任务
-var intervalId = setInterval(function() {
-  console.log("定时任务")
-}, 10000)
-
 // ----------与OBU设备相关----------
 
-//发送握手指令
+/**
+ * 发送握手指令
+ * callback:传递一个函数，参数为code,message
+ *          code：0 
+ *          code：1 错误
+ * */
 var initDevice = function(callback) {
-  if (typeof callback == 'function') {
-    BleUtil.initDevice(deviceId, callback)
-  }
-  // BleUtil.initDevice(deviceId, (code, data) => {
-  //   if (code == 0) {
-  //     console.log('握手成功'+data)
-  //   } else {
-  //     console.log('握手失败'+data)
-  //   }
-  // })
+    BleUtil.initDevice(deviceId, (code,data)=>{
+      if (code == 0) {
+        callback(0, data)
+      } else {
+        callback(1, "read fail")
+      }
+    })
 }
 
 /**
  * 获取设备信息
+ * callback:传递一个函数，参数为code,obj|message
+ *          code：0        obj:obu信息   
+ *          code：1 错误   message:错误
  */
 var getObuNum = function(callback) {
-  if (typeof callback == 'function') {
-    BleUtil.getObuInfo(deviceId, callback)
-  }
-}
-
-/**
- * 获取卡片信息
- */
-var getCardInfo = function() {
-  BleUtil.getCardInfo(deviceId, (code, data) => {
-    console.log('回复码：' + code)
-    console.log('回复数据：' + data)
-  })
-}
-
-/**
- * 设置不休眠时间
- */
-var setSleepTime = function() {
-  BleUtil.obuSetSleepTime('60', deviceId, (code, data) => {
-    console.log('回复码：' + code)
-    console.log('回复数据：' + data)
+  BleUtil.getObuInfo(deviceId, (code, data) => {
+    if (code == 0) {
+      callback(0, data)
+    } else {
+      callback(1, "read fail")
+    }
   })
 }
 
 /**
  * 获取写0016文件的参数
+ * callback:传递一个函数，参数为code,obj|message
+ *          code：0        obj:持卡人信息   
+ *          code：1 错误   message:错误
  */
-var get16Para = function() {
+var get16Para = function(callback) {
   BleUtil.get0016Info(deviceId, (code, data) => {
-
     if (code == 0) {
-      console.log('持卡人身份标识:' + data.cardholderID)
-      console.log('本系统职工标识:' + data.staffID)
-      console.log('持卡人姓名:' + data.cardholderName)
-      console.log('持卡人证件号码:' + data.cardNumber)
-      console.log('持卡人证件类型:' + data.cardType)
-      console.log('随机数:' + data.random)
+      callback(0,data)
     } else {
-      console.log('读取失败')
+      callback(1,"read fail")
     }
   })
 }
@@ -175,23 +154,16 @@ var write16 = function(cardInfo,callback) {
 
 /**
  * 获取写0015文件的参数
+ * callback:传递一个函数，参数为code,obj|message
+ *          code：0        obj:卡信息
+ *          code：1 错误   message:错误
  */
-var get15Para = function() {
+var get15Para = function(callback) {
   BleUtil.get0015Info(deviceId, (code, data) => {
     if (code == 0) {
-      console.log('发卡方标识:' + data.provider)
-      console.log('卡片类型:' + data.cardType)
-      console.log('卡片版本号:' + data.cardVersion)
-      console.log('卡片id:' + data.cardId)
-      console.log('启用时间:' + data.signedDate)
-      console.log('到期时间:' + data.expiredDate)
-      console.log('车牌号码:' + data.vehicleNumber)
-      console.log('用户类型:' + data.userType)
-      console.log('车辆颜色:' + data.plateColor)
-      console.log('车辆类型:' + data.vehicleMode)
-      console.log('随机数:' + data.random)
+      callback(0,data)
     } else {
-      console.log('读取失败')
+      callback(1, '读取失败')
     }
   })
 }
@@ -207,10 +179,17 @@ var write15 = function (cardInfo, callback) {
 
 /**
  * 获取余额
+ * callback:传递一个函数，参数为code,message
+ *          code：0        message:余额
+ *          code：1 错误   message:错误
  */
-var getBalance = function() {
+var getBalance = function(callback) {
   BleUtil.getCardBalance(deviceId,(code,data)=>{
-    console.log(data)
+    if(code==0){
+      callback(0,data)
+    }else{
+      callback(1, data)
+    }
   })
 }
 
@@ -234,11 +213,18 @@ var writeMoney = function (comMoney,callback) {
 
 /**
  * 获取写车辆信息参数
+ * callback:传递一个函数，参数为code,message
+ *          code：0        message:车辆信息参数
+ *          code：1 错误   message:错误
  */
 var getVehiclePara = function(callback) {
-  if (typeof callback == 'function') {
-    BleUtil.getVehiclePara( deviceId, callback)
-  }
+  BleUtil.getVehiclePara( deviceId, (code,data)=>{
+    if(code==0){
+      callback(0,data)
+    }else{
+      callback(1,data)
+    }
+  })
 }
 
 /**
@@ -252,11 +238,18 @@ var writeVehicle = function (commandVeh,callback) {
 
 /**
  * 获取写系统信息参数
+ * callback:传递一个函数，参数为code,data
+ *          code：0        data:车辆信息参数
+ *          code：1 错误   data:错误
  */
 var getSysPara = function(callback) {
-  if (typeof callback == 'function') {
-    BleUtil.getSysPara(deviceId, callback)
-  }
+    BleUtil.getSysPara(deviceId, (code,data)=>{
+      if (code == 0) {
+        callback(0, data)
+      } else {
+        callback(1, data)
+      }
+    })
 }
 
 /**
@@ -288,8 +281,6 @@ var frontInterface = {
   getSysPara: getSysPara,
   writeSys: writeSys,
   getObuNum: getObuNum,
-  getCardInfo: getCardInfo,
-  setSleepTime: setSleepTime
 }
 
 //暴露接口对象
