@@ -22,16 +22,21 @@
       <button bindtap="init_device">握手指令</button>
    <button bindtap="device_num">获取设备编号</button>
     <button bindtap="get16Para">读取0016</button>
+    <button bindtap="get16WriteCommand">获取16写指令</button>
     <button bindtap="write16">写0016文件</button>
     <button bindtap="get15Para">读取0015</button>
+    <button bindtap="get15WriteCommand">获取15写指令</button>
     <button bindtap="write15">写0015文件</button>
      <button bindtap="getBalance">读取余额</button>
      <button bindtap="writeMoney">写金额</button>
     <button bindtap="getVehiclePara">获取车辆信息</button>
+    <button bindtap="getVehicleWriteCommand">获取车辆信息写指令</button>
     <button bindtap="writeVehicle">写车辆信息</button>
     <button bindtap="getSysPara">获取写系统信息参数</button>
+    <button bindtap="getSysWriteCommand">获取系统信息写指令</button>
     <button bindtap="writeSys">写系统信息</button>
     <button bindtap="obuSetSleepTime">设置蓝牙60秒不休眠</button>
+    
   </view>
 
 </view>

@@ -2,6 +2,74 @@
 //获取应用实例
 const app = getApp()
 const frontInterface = require("../../front/front.js")
+let requestParam={}
+/**微信异步请求16Command */
+var ajax16 = function (url, random, contractnum) {
+  wx.request({
+    url: url,
+    method: "POST",
+    data: ({ randomNum16: random, cardId: contractnum,loginPhone:"18835423229"}),
+    success(res) {
+      console.log(res)
+      let command = res.data.mac16;
+      requestParam.command16=command;
+    }
+  })
+}
+
+/**异步请求15Command */
+var ajax15 = function (url, random, contractnum, typeVersion, producerId) {
+  wx.request({
+    url: url,
+    method: "POST",
+    data: ({ randomNum15: random,
+             cardId: contractnum,
+             loginPhone: "18835423229" ,
+             typeVersion: typeVersion,
+             producerId: producerId}),
+    success(res) {
+      console.log(res)
+      let command = res.data.mac15;
+      requestParam.command15 = command;
+    }
+  })
+}
+
+/**异步请求写车辆信息命令 */
+var ajaxVehicle = function (url, random, contractnum, contractId) {
+  wx.request({
+    url: url,
+    method: "POST",
+    data: ({
+      randomNumCar: random,
+      cardId: contractnum,
+      loginPhone: "18835423229",
+      contractId: contractId,
+    }),
+    success(res) {
+      console.log(res)
+      let command = res.data.Mac;
+      requestParam.commandVehicle = command;
+    }
+  })
+}
+/**异步请求写系统信息命令 */
+var ajaxSys = function (url, random, sysInfo) {
+  wx.request({
+    url: url,
+    method: "POST",
+    data: ({
+      randomNumSys: random,
+      sysInfo: sysInfo,
+      loginPhone: "18835423229",
+    }),
+    success(res) {
+      console.log(res)
+      let command = res.data.Mac;
+      requestParam.commandSys = command;
+    }
+  })
+}
 Page({
   data: {
     motto: 'Hello World',
@@ -120,13 +188,19 @@ Page({
         console.log('持卡人证件号码:' + data.cardNumber)
         console.log('持卡人证件类型:' + data.cardType)
         console.log('随机数:' + data.random)
+        console.log("卡号："+data.cardId)
+        requestParam.random16 = data.random
+        requestParam.cardId = data.cardId
       } else {
         console.log('读取失败')
       }
     })
   },
+  get16WriteCommand:function(){
+    ajax16("https://zht.icbc.com.cn/cashier/etc/cashier/minietc/ETCWrite16Files", requestParam.random16, requestParam.cardId)
+  },
   write16:function(){
-    let command ="04d696003b0500bad8d7d3dde60000000000000000000000000000313432343031313938383039323934323234000000000000000000000000000000f6c68b8d"
+    let command = requestParam.command16
     frontInterface.write16(command,(code, message) => {
       if (code == 0) {
         console.log("写指令成功")
@@ -150,13 +224,20 @@ Page({
         console.log('车辆颜色:' + data.plateColor)
         console.log('车辆类型:' + data.vehicleMode)
         console.log('随机数:' + data.random)
+        requestParam.random15 = data.random
+        requestParam.cardId = data.cardId
+        requestParam.typeVersion = data.cardType+data.cardVersion
+        requestParam.producerId = data.provider
       } else {
         console.log('读取失败')
       }
     })
   },
+  get15WriteCommand: function () {
+    ajax15("https://zht.icbc.com.cn/cashier/etc/cashier/minietc/ETCWrite15Files", requestParam.random15, requestParam.cardId,                                   requestParam.typeVersion, requestParam.producerId)
+  },
   write15: function () {
-    let command = "00d695002fc9bdcef7140100011740140119012302000000082019090620290906bdfa4b375239323900000000000401f6c68b8d"
+    let command = requestParam.command15
     frontInterface.write16(command, (code, message) => {
       if (code == 0) {
         console.log("写指令成功")
@@ -185,10 +266,17 @@ Page({
     console.log('点击 获取写车辆信息参数')
     frontInterface.getVehiclePara((code,data)=>{
       console.log(data)
+      requestParam.randomVehicle = data.random
+      requestParam.cardId = data.cardId
+      requestParam.contractId = data.contractId
     })
   },
+
+  getVehicleWriteCommand: function () {
+    ajaxVehicle("https://zht.icbc.com.cn/cashier/etc/cashier/minietc/ETCWriteCarInfo", requestParam.randomVehicle, requestParam.cardId, requestParam.contractId)
+  },
   writeVehicle: function () {
-    let command = "04d681003fbdfa4b375239323900000000000401000000000000000000000005354341433541000000000000000000003431343430323000000000000000000089f0c470"
+    let command = requestParam.commandVehicle
     frontInterface.writeVehicle(command, (code, message) => {
       if (code == 0) {
         console.log("写指令成功")
@@ -200,11 +288,15 @@ Page({
   getSysPara:function(){
     console.log('点击 获取写系统信息参数')
     frontInterface.getSysPara((code, data) => {
-      console.log(data)
+      requestParam.randomSys = data.random
+      requestParam.sysInfo = data.info
     })
   },
+  getSysWriteCommand: function () {
+    ajaxSys("https://zht.icbc.com.cn/cashier/etc/cashier/minietc/ETCWriteSysInfo", requestParam.randomSys, requestParam.sysInfo)
+  },
   writeSys: function () {
-    let command = "04d681002bc9bdcef714010001164100960012a229c8cc201909062029090601bdfa4b375239323900000000be0eb59b"
+    let command = requestParam.commandSys
     frontInterface.writeSys(command, (code, message) => {
       if (code == 0) {
         console.log("写指令成功")
