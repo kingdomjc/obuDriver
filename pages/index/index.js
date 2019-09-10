@@ -48,7 +48,7 @@ var ajaxVehicle = function (url, random, contractnum, contractId) {
     }),
     success(res) {
       console.log(res)
-      let command = res.data.Mac;
+      let command = res.data.macCar;
       requestParam.commandVehicle = command;
     }
   })
@@ -65,8 +65,30 @@ var ajaxSys = function (url, random, sysInfo) {
     }),
     success(res) {
       console.log(res)
-      let command = res.data.Mac;
+      let command = res.data.macSys;
       requestParam.commandSys = command;
+    }
+  })
+}
+/**异步请求圈存命令 */
+var ajaxLoad = function (url, balance, beforeMoney, cardId, czMoney, mac1, onineSN, randomNumR) {
+  wx.request({
+    url: url,
+    method: "POST",
+    data: ({
+      loginPhone: "18835423229",
+      balance: balance,
+      beforeMoney: beforeMoney,
+      cardId: cardId,
+      czMoney: czMoney,
+      mac1: mac1,
+      onineSN: onineSN,
+      randomNumR: randomNumR,
+    }),
+    success(res) {
+      console.log(res)
+      let command = res.data.macLoad;
+      requestParam.commandLoad = command;
     }
   })
 }
@@ -252,6 +274,21 @@ Page({
       console.log("余额"+data)
     })
   },
+
+  initLoad:function(){
+    frontInterface.initLoad(money, terminnalNo,(code,data)=>{
+      if (code == 0) {
+        console.log("初始化成功")
+        requestParam.balance = data.balance
+        requestParam.randomLoad = data.icRandom
+        requestParam.mac1 = data.mac1
+        requestParam.tradeNo = data.serial
+        requestParam.cardNum = data.cardId
+      } else {
+        console.log(data)
+      }
+    })
+  },
   writeMoney:function(){
     let command = "00d695002fc9bdcef7140100011740140119012302000000082019090620290906bdfa4b375239323900000000000401f6c68b8d"
     frontInterface.writeMoney(command, (code, message) => {
@@ -288,8 +325,9 @@ Page({
   getSysPara:function(){
     console.log('点击 获取写系统信息参数')
     frontInterface.getSysPara((code, data) => {
+      console.log(data)
       requestParam.randomSys = data.random
-      requestParam.sysInfo = data.info
+      requestParam.sysInfo = data.sysInfo
     })
   },
   getSysWriteCommand: function () {

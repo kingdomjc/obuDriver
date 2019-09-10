@@ -208,9 +208,13 @@ var getBalance = function(callback) {
  * '805000020B01' + padLeft(recharge) + terminal_no + '10'
  * 805000020B010000000060000000020010
  */
-var initLoad = function (recharge, terminnalNo, pinCode, procType, keyIndex, callback) {
-  BleUtil.loadCardInit(recharge, terminnalNo, pinCode, procType, keyIndex,deviceId, (code, data) => {
-    console.log(data)
+var initLoad = function (recharge, terminnalNo,callback) {
+  BleUtil.loadCardInit(recharge, terminnalNo, "", "02", "01", deviceId, (code, data) => {
+    if (code == 0) {
+      callback(0, data)
+    } else {
+      callback(1, "init fail")
+    }
   })
 }
 
