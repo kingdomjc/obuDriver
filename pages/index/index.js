@@ -71,13 +71,12 @@ var ajaxSys = function (url, random, sysInfo) {
   })
 }
 /**异步请求圈存命令 */
-var ajaxLoad = function (url, balance, beforeMoney, cardId, czMoney, mac1, onineSN, randomNumR) {
+var ajaxLoad = function (url, beforeMoney, cardId, czMoney, mac1, onineSN, randomNumR) {
   wx.request({
     url: url,
     method: "POST",
     data: ({
       loginPhone: "18835423229",
-      balance: balance,
       beforeMoney: beforeMoney,
       cardId: cardId,
       czMoney: czMoney,
@@ -87,7 +86,7 @@ var ajaxLoad = function (url, balance, beforeMoney, cardId, czMoney, mac1, onine
     }),
     success(res) {
       console.log(res)
-      let command = res.data.macLoad;
+      let command = res.data.msg;
       requestParam.commandLoad = command;
     }
   })
@@ -256,6 +255,7 @@ Page({
     })
   },
   get15WriteCommand: function () {
+    console.log(requestParam.random15 + "    " + requestParam.cardId+"    "+requestParam.typeVersion+"    "+requestParam.producerId)
     ajax15("https://zht.icbc.com.cn/cashier/etc/cashier/minietc/ETCWrite15Files", requestParam.random15, requestParam.cardId,                                   requestParam.typeVersion, requestParam.producerId)
   },
   write15: function () {
@@ -276,21 +276,28 @@ Page({
   },
 
   initLoad:function(){
-    frontInterface.initLoad(money, terminnalNo,(code,data)=>{
+    let money = "0"
+    let terminnalNo = "600000000200"
+    let pinCode="313233343536"
+    frontInterface.initLoad(money, terminnalNo, pinCode,(code,data)=>{
       if (code == 0) {
         console.log("初始化成功")
-        requestParam.balance = data.balance
-        requestParam.randomLoad = data.icRandom
+        requestParam.balance = data.balance    //余额
+        requestParam.randomLoad = data.icRandom  //随机数
         requestParam.mac1 = data.mac1
-        requestParam.tradeNo = data.serial
-        requestParam.cardNum = data.cardId
+        requestParam.tradeNo = data.serial     //合同序列号
+        requestParam.cardId = data.cardnum     //卡号
+        requestParam.money=data.money               //要冲多少钱
       } else {
         console.log(data)
       }
     })
   },
+  getLoadWriteCommand:function(){
+    ajaxLoad("https://zht.icbc.com.cn/cashier/etc/cashier/minietc/ETCRecharge", requestParam.balance, requestParam.cardId, requestParam.money, requestParam.mac1, requestParam.tradeNo, requestParam.randomLoad)
+  },
   writeMoney:function(){
-    let command = "00d695002fc9bdcef7140100011740140119012302000000082019090620290906bdfa4b375239323900000000000401f6c68b8d"
+    let command = requestParam.commandLoad
     frontInterface.writeMoney(command, (code, message) => {
       if (code == 0) {
         console.log("写指令成功")

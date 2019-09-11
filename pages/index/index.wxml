@@ -28,6 +28,8 @@
     <button bindtap="get15WriteCommand">获取15写指令</button>
     <button bindtap="write15">写0015文件</button>
      <button bindtap="getBalance">读取余额</button>
+     <button bindtap="initLoad">圈存初始化</button>
+     <button bindtap="getLoadWriteCommand">获取圈存指令</button>
      <button bindtap="writeMoney">写金额</button>
     <button bindtap="getVehiclePara">获取车辆信息</button>
     <button bindtap="getVehicleWriteCommand">获取车辆信息写指令</button>
