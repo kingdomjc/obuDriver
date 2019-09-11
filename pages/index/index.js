@@ -1,7 +1,7 @@
 //index.js
 //获取应用实例
 const app = getApp()
-const frontInterface = require("../../front/front.js")
+const frontInterface = require("../../lib/front.js")
 let requestParam={}
 /**微信异步请求16Command */
 var ajax16 = function (url, random, contractnum) {
