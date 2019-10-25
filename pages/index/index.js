@@ -137,8 +137,10 @@ Page({
     frontInterface.blueConnect((code,message)=>{
       if (code == 0) {
         console.log('连接成功')
-      } else {
+      } else if(code==1){
         console.log('连接失败')
+      }else if(code==2){
+        console.log('连接超时')
       }
     })
   },
